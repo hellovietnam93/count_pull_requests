@@ -1,0 +1,138 @@
+require "selenium-webdriver"
+require "csv"
+
+class CountPullRequests
+  CSV_HEADER = ["#", "PR ID", "Pull Request", "Bugs","Line of code +", "Line of code -"]
+
+  attr_accessor :driver, :pull_requests, :data_export_to_csv, :repository_names, :csv_header, :wait, :filters_by_months
+
+  def initialize args
+    @user = args[:user]
+    @repository = args[:repository]
+    init_selenium
+    load_conditions
+  end
+
+  def call
+    login_to_github
+    init_github_repo
+    get_list_pull_requests
+  end
+
+  private
+
+  def init_selenium
+    @driver = Selenium::WebDriver.for :firefox
+    @driver.navigate.to "https://github.com/login"
+    @wait = Selenium::WebDriver::Wait.new timeout: 1000
+  end
+
+  def load_conditions
+    @filters_by_month = "is:pr is:merged NOT Merge in:title OR NOT Release in:title created:2018-04-01..2018-04-04"
+  end
+
+  def init_github_repo
+    @url = "#{@repository.name}/pulls"
+    @file_name = "tmp/test_count.csv"
+  end
+
+  def login_to_github
+    email = driver.find_element name: "login"
+    email.send_keys @user.git_account
+
+    password = driver.find_element name: "password"
+    password.send_keys @user.git_password
+
+    submit = driver.find_element name: "commit"
+    submit.click
+  end
+
+  def init_instances
+    @pull_requests = []
+    @data_export_to_csv = []
+  end
+
+  def get_list_pull_requests
+    driver.get @url
+    filters_pull_request_by_query
+    init_instances
+    sleep 2
+
+    button_next = begin
+      driver.find_element class: "next_page"
+    rescue Exception => e
+      true
+    end
+
+    while button_next
+      sleep 2
+      link_pull_requests = driver.find_elements :xpath, "//a[@class='link-gray-dark v-align-middle no-underline h4 js-navigation-open']"
+
+      puts link_pull_requests.size
+
+      link_pull_requests.each do |link_pull_request|
+        pull_requests << link_pull_request.attribute("href")
+        puts link_pull_request.attribute("href")
+      end
+
+      break if button_next == true
+      break if button_next.tag_name == "span"
+
+      button_next.click
+      sleep 4
+      button_next = driver.find_element class: "next_page"
+    end
+    puts pull_requests
+    puts pull_requests.size
+    count_total_additional
+    export_data_to_csv @file_name
+  end
+
+  def filters_pull_request_by_query
+    filter_element = driver.find_element id: "js-issues-search"
+    filter_element.clear
+    filter_element.send_keys @filters_by_month
+    filter_element.submit
+  end
+
+  def count_total_additional
+    total_additional = 0
+    total_deletion = 0
+    pull_requests.each_with_index do |pull_request, index|
+      driver.get "#{pull_request}/files"
+      wait.until {driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[1]'}
+      additional_element = driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[1]'
+      deletion_element = driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[2]'
+      additional = additional_element.text.gsub(",", "").to_i
+      deletion = deletion_element.text.gsub("−", "-").to_i
+      pr_id = pull_request.delete @url
+      data_export_to_csv << [index + 1, pr_id, pull_request, 0, additional, deletion]
+      total_additional += additional
+      total_deletion += deletion
+      puts "|#{index + 1} | #{pr_id} | #{pull_request} | Line code +: #{additional} | Line code -: #{deletion}|"
+    end
+    puts "total_additional : #{total_additional}"
+    puts "total_deletion : #{total_deletion}"
+  end
+
+  def export_data_to_csv file_name
+    CSV.open(file_name, "wb") do |csv|
+      csv << CSV_HEADER
+      data_export_to_csv.each do |data|
+        csv << data
+      end
+    end
+
+    puts "export csv success !"
+  end
+
+  def export_data_to_csv_pr file_name
+    CSV.open(file_name, "wb") do |csv|
+      pull_requests.each do |pull_request|
+        csv << [pull_request]
+      end
+    end
+
+    puts "export csv success !"
+  end
+end

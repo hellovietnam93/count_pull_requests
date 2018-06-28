@@ -1,1 +1,19 @@
 en:
+  dictionary:
+    not_found: &not_found Record not found
+  repositories:
+    create:
+      created: Created repository successfully
+      not_created: Failed to create repository
+    show:
+      not_found: *not_found
+    edit:
+      not_found: *not_found
+    update:
+      updated: Updated repository successfully
+      not_updated: Failed to update repository
+      not_found: *not_found
+    destroy:
+      deleted: Deleted repository successfully
+      not_deleted: Failed to delete repository
+      not_found: *not_found
