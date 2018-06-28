@@ -1,0 +1,23 @@
+<header class="main-header">
+  <%= render "layouts/logo" %>
+  <nav class="navbar navbar-static-top" role="navigation">
+    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+      <span class="sr-only">Toggle navigation</span>
+    </a>
+    <div class="navbar-custom-menu">
+      <ul class="nav navbar-nav">
+        <%# if user_signed_in? %>
+          <%#= render "layouts/reminders" %>
+          <%= render "layouts/menu" %>
+        <%# else %>
+          <!-- <li> -->
+            <%#= link_to new_user_session_path do %>
+              <!-- <i class="fa fa-sign-in fa-tw"></i> -->
+              <%#= t ".title" %>
+            <%# end %>
+          <!-- </li> -->
+        <%# end %>
+      </ul>
+    </div>
+  </nav>
+</header>

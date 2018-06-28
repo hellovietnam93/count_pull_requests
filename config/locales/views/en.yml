@@ -1,0 +1,17 @@
+en:
+  dictionary:
+    email: &email Email
+    password: &password Password
+    password_confirmation: &password_confirmation Password confirmation
+  users:
+    sessions:
+      new:
+        login_form: Welcome
+        email: *email
+        password: *password
+        remember_me: Remember me on this computer
+        sign_in_btn: Sign in
+  layouts:
+    menu:
+      sign_out_btn: Sign out
+      profile_btn: Profile
