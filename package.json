@@ -1,0 +1,5 @@
+{
+  "name": "crawl_pull_requests",
+  "private": true,
+  "dependencies": {}
+}
