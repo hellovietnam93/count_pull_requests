@@ -3,6 +3,11 @@ en:
     email: &email Email
     password: &password Password
     password_confirmation: &password_confirmation Password confirmation
+    save_btn: &save_btn Save
+    repository_name: &repository_name Name
+    edit_btn: &edit_btn Edit
+    remove_btn: &remove_btn Remove
+    confirm: &confirm Are you sure?
   users:
     sessions:
       new:
@@ -15,3 +20,18 @@ en:
     menu:
       sign_out_btn: Sign out
       profile_btn: Profile
+    sidebar:
+      repositories:
+        title: Repositories
+        new: New repository
+        list: List
+  repositories:
+    form:
+      name: *repository_name
+      save_btn: *save_btn
+    show:
+      name: *repository_name
+      count_pr_btn: Get PR list
+      edit_btn: *edit_btn
+      remove_btn: *remove_btn
+      confirm: *confirm

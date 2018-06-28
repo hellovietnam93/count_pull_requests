@@ -1,11 +1,14 @@
 <aside class="main-sidebar">
   <section class="sidebar">
     <ul class="sidebar-menu">
-      <!-- <li class="header text-uppercase"> -->
-        <%#= t "sidebars.sections.online.title" %>
-      <!-- </li> -->
+      <li class="header text-uppercase">
+        <%= t ".repositories.title" %>
+      </li>
       <li>
-        <%= link_to "test", "#" %>
+        <%= link_to t(".repositories.new"), new_repository_path %>
+      </li>
+      <li>
+        <%= link_to t(".repositories.list"), repositories_path %>
       </li>
     </ul>
   </section>
