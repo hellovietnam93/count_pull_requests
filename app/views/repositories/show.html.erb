@@ -9,6 +9,25 @@
       <%= link_to t(".remove_btn"), @repository, method: :delete,
         data: {confirm: t(".confirm")}, class: "btn btn-danger" %>
     </td>
-    <td><%= link_to t(".count_pr_btn"), count_pull_requests_repository_path, method: :patch, class: "btn btn-info" %></td>
+    <td><%= link_to t(".create_query_btn"), new_repository_query_condition_path(@repository), class: "btn btn-info" %></td>
   </tr>
+</table>
+
+<h1><%= t ".query_list" %></h1>
+
+<table class="table table-border">
+  <thead>
+    <tr>
+      <th><%= "#" %></th>
+      <th><%= t ".content" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @repository.query_conditions.each_with_index do |query_condition, index| %>
+      <tr>
+        <td><%= index + 1 %></td>
+        <td><%= link_to query_condition.content, query_condition %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>

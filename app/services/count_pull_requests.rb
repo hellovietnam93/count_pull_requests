@@ -2,13 +2,14 @@ require "selenium-webdriver"
 require "csv"
 
 class CountPullRequests
-  CSV_HEADER = ["#", "PR ID", "Pull Request", "Bugs","Line of code +", "Line of code -"]
+  CSV_HEADER = ["#", "Author", "PR ID", "Pull Request", "Bugs","Line of code +", "Line of code -"]
 
   attr_accessor :driver, :pull_requests, :data_export_to_csv, :repository_names, :csv_header, :wait, :filters_by_months
 
   def initialize args
     @user = args[:user]
     @repository = args[:repository]
+    @query = args[:query]
     init_selenium
     load_conditions
   end
@@ -28,7 +29,7 @@ class CountPullRequests
   end
 
   def load_conditions
-    @filters_by_month = "is:pr is:merged NOT Merge in:title OR NOT Release in:title created:2018-04-01..2018-04-04"
+    @filters_by_month = @query.content
   end
 
   def init_github_repo
@@ -50,6 +51,7 @@ class CountPullRequests
   def init_instances
     @pull_requests = []
     @data_export_to_csv = []
+    @pr_improts = []
   end
 
   def get_list_pull_requests
@@ -103,14 +105,17 @@ class CountPullRequests
       wait.until {driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[1]'}
       additional_element = driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[1]'
       deletion_element = driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[2]'
+      author = driver.find_element(:class, "pull-header-username").text
       additional = additional_element.text.gsub(",", "").to_i
       deletion = deletion_element.text.gsub("−", "-").to_i
       pr_id = pull_request.delete @url
-      data_export_to_csv << [index + 1, pr_id, pull_request, 0, additional, deletion]
+      data_export_to_csv << [index + 1, author, pr_id, pull_request, 0, additional, deletion]
       total_additional += additional
       total_deletion += deletion
-      puts "|#{index + 1} | #{pr_id} | #{pull_request} | Line code +: #{additional} | Line code -: #{deletion}|"
+      @pr_improts << PullRequest.new(author: author, pr_id: pr_id, pull_request: pull_request, plus_code: additional, minus_code: deletion, query_condition_id: @query.id)
+      puts "|#{index + 1} | #{author} | #{pr_id} | #{pull_request} | Line code +: #{additional} | Line code -: #{deletion}|"
     end
+    PullRequest.import @pr_improts
     puts "total_additional : #{total_additional}"
     puts "total_deletion : #{total_deletion}"
   end

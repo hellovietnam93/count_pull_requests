@@ -10,7 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180628080618) do
+ActiveRecord::Schema.define(version: 20180629065713) do
+
+  create_table "pull_requests", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "author"
+    t.string "pr_id"
+    t.string "pull_request"
+    t.integer "plus_code"
+    t.integer "minus_code"
+    t.integer "query_condition_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["query_condition_id"], name: "index_pull_requests_on_query_condition_id"
+  end
+
+  create_table "query_conditions", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text "content"
+    t.integer "repository_id"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["repository_id"], name: "index_query_conditions_on_repository_id"
+    t.index ["user_id"], name: "index_query_conditions_on_user_id"
+  end
 
   create_table "repositories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
