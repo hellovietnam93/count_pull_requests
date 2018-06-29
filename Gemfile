@@ -16,6 +16,7 @@ gem "devise"
 gem "bootstrap-sass"
 gem "jquery-rails"
 gem "font-awesome-rails"
+gem "activerecord-import", "~> 0.15.0"
 
 group :development, :test do
   gem "pry"

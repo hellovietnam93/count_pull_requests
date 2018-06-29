@@ -17,3 +17,22 @@ en:
       deleted: Deleted repository successfully
       not_deleted: Failed to delete repository
       not_found: *not_found
+  query_conditions:
+    create:
+      created: Created query successfully
+      not_created: Failed to create query
+    show:
+      not_found: *not_found
+    edit:
+      not_found: *not_found
+    update:
+      updated: Updated query successfully
+      not_updated: Failed to update query
+      not_found: *not_found
+    destroy:
+      deleted: Deleted query successfully
+      not_deleted: Failed to delete query
+      not_found: *not_found
+  count_pull_requests:
+    update:
+      not_found: *not_found

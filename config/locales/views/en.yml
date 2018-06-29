@@ -8,6 +8,7 @@ en:
     edit_btn: &edit_btn Edit
     remove_btn: &remove_btn Remove
     confirm: &confirm Are you sure?
+    content: &content Query content
   users:
     sessions:
       new:
@@ -31,7 +32,23 @@ en:
       save_btn: *save_btn
     show:
       name: *repository_name
-      count_pr_btn: Get PR list
       edit_btn: *edit_btn
       remove_btn: *remove_btn
       confirm: *confirm
+      query_list: List queries
+      content: *content
+      create_query_btn: Create new query
+  query_conditions:
+    form:
+      content: *content
+      save_btn: *save_btn
+    show:
+      count_pr_btn: Get PR list
+      edit_btn: *edit_btn
+      remove_btn: *remove_btn
+      author: Author
+      pr_id: Pull request ID
+      pull_request: pull request link
+      plus_code: Line code +
+      minus_code: Line code -
+      pull_requests: List pull request
