@@ -13,7 +13,10 @@
       <%= link_to t(".remove_btn"), @query_condition, method: :delete,
         data: {confirm: t(".confirm")}, class: "btn btn-danger" %>
     </td>
-    <td><%= link_to t(".count_pr_btn"), count_pull_requests_query_condition_path(@query_condition), method: :patch, class: "btn btn-info" %></td>
+    <td>
+      <%= link_to t(".count_pr_btn"), count_pull_requests_query_condition_path(@query_condition), method: :patch, class: "btn btn-info" %>
+      <%= link_to t(".export_btn"), export_query_condition_path(@query_condition, format: "xlsx"), class: "btn btn-success" %>
+    </td>
   </tr>
 </table>
 

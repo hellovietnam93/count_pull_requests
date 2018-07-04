@@ -9,5 +9,9 @@ Rails.application.routes.draw do
   namespace :count_pull_requests do
     resources :query_conditions, only: :update
   end
-  resources :query_conditions, only: %i(show edit update destroy)
+  resources :query_conditions, only: %i(show edit update destroy) do
+    member do
+      get :export
+    end
+  end
 end
