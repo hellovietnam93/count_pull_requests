@@ -69,11 +69,9 @@ class CountPullRequests
     while button_next
       sleep 2
       link_pull_requests = driver.find_elements :xpath, "//a[@class='link-gray-dark v-align-middle no-underline h4 js-navigation-open']"
-      # puts link_pull_requests.size
 
       link_pull_requests.each do |link_pull_request|
         pull_requests << link_pull_request.attribute("href")
-        # puts link_pull_request.attribute("href")
       end
 
       break if button_next == true
@@ -83,10 +81,7 @@ class CountPullRequests
       sleep 4
       button_next = driver.find_element class: "next_page"
     end
-    # puts pull_requests
-    # puts pull_requests.size
     count_total_additional
-    # export_data_to_csv @file_name
   end
 
   def filters_pull_request_by_query
@@ -97,26 +92,19 @@ class CountPullRequests
   end
 
   def count_total_additional
-    # total_additional = 0
-    # total_deletion = 0
     pull_requests.each_with_index do |pull_request, index|
       driver.get "#{pull_request}/files"
       wait.until {driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[1]'}
       additional_element = driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[1]'
       deletion_element = driver.find_element :xpath, '//*[@id="files_bucket"]/div[3]/div/span/span[2]'
-      author = driver.find_element(:class, "pull-header-username").text
+      author = driver.find_element(:class, "head-ref").find_element(:class, "user").text rescue nil
       additional = additional_element.text.gsub(",", "").to_i
       deletion = deletion_element.text.gsub("−", "-").to_i
       pr_id = pull_request.delete @url
       data_export_to_csv << [index + 1, author, pr_id, pull_request, 0, additional, deletion]
-      # total_additional += additional
-      # total_deletion += deletion
       @pr_improts << PullRequest.new(author: author, pr_id: pr_id, pull_request: pull_request, plus_code: additional, minus_code: deletion, query_condition_id: @query.id)
-      # puts "|#{index + 1} | #{author} | #{pr_id} | #{pull_request} | Line code +: #{additional} | Line code -: #{deletion}|"
     end
     PullRequest.import @pr_improts
-    # puts "total_additional : #{total_additional}"
-    # puts "total_deletion : #{total_deletion}"
   end
 
   def export_data_to_csv file_name
