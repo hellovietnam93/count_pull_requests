@@ -18,11 +18,11 @@ gem "font-awesome-rails"
 gem "activerecord-import", "~> 0.15.0"
 gem "axlsx", "= 2.0.1"
 gem "axlsx_rails"
+gem "selenium-webdriver"
 
 group :development, :test do
   gem "pry"
   gem "capybara", "~> 2.13"
-  gem "selenium-webdriver"
   gem "rspec-rails", "~> 3.7"
   gem "factory_bot_rails"
   gem "better_errors"
