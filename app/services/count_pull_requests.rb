@@ -1,4 +1,3 @@
-require "selenium-webdriver"
 require "csv"
 
 class CountPullRequests

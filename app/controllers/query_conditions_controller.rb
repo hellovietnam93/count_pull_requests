@@ -41,7 +41,7 @@ class QueryConditionsController < ApplicationController
     else
       flash[:error] = t ".not_deleted"
     end
-    redirect_to @repository
+    redirect_to @query_condition.repository
   end
 
   def export
