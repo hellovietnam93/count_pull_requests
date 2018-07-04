@@ -17,6 +17,8 @@ gem "bootstrap-sass"
 gem "jquery-rails"
 gem "font-awesome-rails"
 gem "activerecord-import", "~> 0.15.0"
+gem "axlsx", "= 2.0.1"
+gem "axlsx_rails"
 
 group :development, :test do
   gem "pry"

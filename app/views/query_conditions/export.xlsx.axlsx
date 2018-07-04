@@ -1,0 +1,11 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Pull request") do |sheet|
+  # this is the head row of your spreadsheet
+  sheet.add_row @headers
+
+  # each user is a row on your spreadsheet
+  @pull_requests.each_with_index do |pull_request, index|
+    sheet.add_row [index + 1, pull_request.author, pull_request.pr_id, pull_request.pull_request, pull_request.plus_code, pull_request.minus_code]
+  end
+end

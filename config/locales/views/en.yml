@@ -52,3 +52,5 @@ en:
       plus_code: Line code +
       minus_code: Line code -
       pull_requests: List pull request
+      confirm: *confirm
+      export_btn: Export

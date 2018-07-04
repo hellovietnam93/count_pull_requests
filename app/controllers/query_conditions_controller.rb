@@ -1,6 +1,6 @@
 class QueryConditionsController < ApplicationController
   before_action :load_repository, only: %i(new create)
-  before_action :load_query_condition, only: %i(show edit update destroy)
+  before_action :load_query_condition, only: %i(show edit update destroy export)
 
   def new
     @query_condition = @repository.query_conditions.new
@@ -44,6 +44,15 @@ class QueryConditionsController < ApplicationController
     redirect_to @repository
   end
 
+  def export
+    @pull_requests = @query_condition.pull_requests
+    @headers = ["#", "Author", "PR ID", "Pull Request", "Line of code +", "Line of code -"]
+    filename = "pull_requests.xlsx"
+    respond_to do |format|
+      format.xlsx{response.headers['Content-Disposition'] = "attachment; filename=#{filename}"}
+    end
+  end
+
   private
 
   def query_condition_params
@@ -55,7 +64,7 @@ class QueryConditionsController < ApplicationController
 
     unless @query_condition
       flash[:error] = t ".not_found"
-      redirect_to @repository
+      redirect_to @query_condition.repository
     end
   end
 
